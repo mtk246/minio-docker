@@ -1,0 +1,7 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'minio'
+    static_configs:
+      - targets: ['minio1:9000', 'minio2:9000', 'minio3:9000']

@@ -1,0 +1,42 @@
+version: '3'
+services:
+  minio1:
+    image: quay.io/minio/minio
+    container_name: minio1
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - MINIO_ROOT_USER=minio99
+      - MINIO_ROOT_PASSWORD=minio123
+    command: server http://minio1:9000/data http://minio2:9000/data http://minio3:9000/data --console-address ":9001"
+
+  minio2:
+    image: quay.io/minio/minio
+    container_name: minio2
+    ports:
+      - 9002:9000
+      - 9003:9001
+    environment:
+      - MINIO_ROOT_USER=minio99
+      - MINIO_ROOT_PASSWORD=minio123
+    command: server http://minio1:9000/data http://minio2:9000/data http://minio3:9000/data --console-address ":9003"
+
+  minio3:
+    image: quay.io/minio/minio
+    container_name: minio3
+    ports:
+      - 9004:9000
+      - 9005:9001
+    environment:
+      - MINIO_ROOT_USER=minio99
+      - MINIO_ROOT_PASSWORD=minio123
+    command: server http://minio1:9000/data http://minio2:9000/data http://minio3:9000/data --console-address ":9005"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - /path/to/prometheus.yml:/etc/prometheus/prometheus.yml
